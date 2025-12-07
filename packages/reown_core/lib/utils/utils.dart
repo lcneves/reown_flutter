@@ -104,8 +104,11 @@ class ReownCoreUtils {
       relayParams['projectId'] = projectId!;
     }
 
-    // Add bundleId, packageName or origin query param based on platform
-    if ((packageName ?? '').isNotEmpty) {
+    // Check for WALLETCONNECT_ORIGIN env var override
+    const walletConnectOrigin = String.fromEnvironment('WALLETCONNECT_ORIGIN');
+    if (walletConnectOrigin.isNotEmpty) {
+      relayParams['origin'] = walletConnectOrigin;
+    } else if ((packageName ?? '').isNotEmpty) {
       final platform = getId();
       if (platform == 'ios') {
         relayParams['bundleId'] = packageName!;
